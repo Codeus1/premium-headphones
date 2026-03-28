@@ -508,7 +508,7 @@ export const DesignStyles = () => {
     setTimeout(() => {
       setColor(key);
       setFade(false);
-    }, 120);
+    }, 300);
   };
 
   return (
