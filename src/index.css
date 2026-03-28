@@ -1,25 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Space+Grotesk:wght@400;600;700&display=swap');
 @import 'tailwindcss';
-/* Hero background word style */
+
+/* ===== Hero background word style ===== */
 
 .hero-bg-text {
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    'Apple Color Emoji',
-    'Segoe UI Emoji';
+  font-family: Outfit, Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
   font-size: clamp(72px, 12vw, 180px);
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  /* default normal line height */
   letter-spacing: -0.04em;
-  /* scales with font size */
   display: inline-block;
   white-space: nowrap;
   background: linear-gradient(180deg, #5a5a5a 0%, #0a100f 74.18%);
@@ -29,7 +18,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Keyframes for hero intro */
+/* ===== Keyframes for hero intro ===== */
 
 @keyframes heroIn {
   0% {
@@ -66,7 +55,7 @@
   }
 }
 
-/* Fonts */
+/* ===== Custom properties ===== */
 
 :root {
   --bg: #000000;
@@ -84,25 +73,16 @@ body {
   margin: 0;
   background: #000000;
   color: white;
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    'Apple Color Emoji',
-    'Segoe UI Emoji';
+  font-family: Outfit, Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/***** Typography *****/
+/* ===== Typography ===== */
 
 .font-display {
-  font-family: 'Space Grotesk', Inter, system-ui, sans-serif;
+  font-family: 'Space Grotesk', Outfit, Inter, system-ui, sans-serif;
 }
 
 .eyebrow {
@@ -113,11 +93,7 @@ body {
 }
 
 .eyebrow-gradient {
-  background: linear-gradient(
-    90deg,
-    rgba(110, 231, 183, 1) 0%,
-    rgba(103, 232, 249, 1) 100%
-  );
+  background: linear-gradient(90deg, rgba(110, 231, 183, 1) 0%, rgba(103, 232, 249, 1) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -125,7 +101,7 @@ body {
 }
 
 .h1 {
-  font-family: 'Space Grotesk', Inter, sans-serif;
+  font-family: 'Space Grotesk', Outfit, Inter, sans-serif;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -133,7 +109,7 @@ body {
 }
 
 .h2 {
-  font-family: 'Space Grotesk', Inter, sans-serif;
+  font-family: 'Space Grotesk', Outfit, Inter, sans-serif;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -154,7 +130,7 @@ body {
   font-size: clamp(20px, 3vw, 24px);
 }
 
-/***** Buttons & Inputs *****/
+/* ===== Buttons & Inputs ===== */
 
 .btn {
   @apply inline-flex items-center justify-center px-5 py-3 rounded-full bg-white text-black font-semibold hover:bg-neutral-200 transition-colors;
@@ -172,7 +148,7 @@ body {
   @apply text-white/70 hover:text-white transition-colors;
 }
 
-/***** Cards *****/
+/* ===== Cards ===== */
 
 .card {
   @apply rounded-2xl p-4 md:p-6 bg-white/[0.04] ring-1 ring-white/10;
@@ -184,9 +160,7 @@ body {
 
 .hover-lift {
   transform: translateY(0);
-  transition:
-    transform 0.4s ease,
-    box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .hover-lift:hover {
@@ -194,14 +168,14 @@ body {
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 }
 
-/***** Hero *****/
+/* ===== Hero ===== */
 
 .stacked-heading {
   position: relative;
 }
 
 .stacked-heading .stack-line {
-  font-family: 'Space Grotesk', Inter, sans-serif;
+  font-family: 'Space Grotesk', Outfit, Inter, sans-serif;
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 0.9;
@@ -211,42 +185,32 @@ body {
   opacity: 0.8;
 }
 
-.stacked-heading .stack-line:nth-child(1) {
-  transform: translateY(-16px);
+.stacked-heading .stack-line:nth-child(1) { transform: translateY(-16px); }
+.stacked-heading .stack-line:nth-child(2) { transform: translateY(-12px); }
+.stacked-heading .stack-line:nth-child(3) { transform: translateY(-8px); }
+.stacked-heading .stack-line:nth-child(4) { transform: translateY(-4px); }
+.stacked-heading .stack-line:nth-child(5) { transform: translateY(0px); }
+.stacked-heading .stack-line:nth-child(6) { transform: translateY(4px); }
+
+/* Hero shadow: GPU-friendly radial gradient instead of expensive drop-shadow filter */
+.hero-shadow {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 120px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 5;
 }
 
-.stacked-heading .stack-line:nth-child(2) {
-  transform: translateY(-12px);
-}
-
-.stacked-heading .stack-line:nth-child(3) {
-  transform: translateY(-8px);
-}
-
-.stacked-heading .stack-line:nth-child(4) {
-  transform: translateY(-4px);
-}
-
-.stacked-heading .stack-line:nth-child(5) {
-  transform: translateY(0px);
-}
-
-.stacked-heading .stack-line:nth-child(6) {
-  transform: translateY(4px);
-}
-
-.hero-media {
-  filter: drop-shadow(0 40px 120px rgba(0, 0, 0, 0.6));
-}
-
-/***** Animations *****/
+/* ===== Animations ===== */
 
 .fade-up {
   opacity: 0;
   transform: translateY(16px);
-  transition:
-    opacity 0.7s ease,
-    transform 0.7s ease;
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .fade-up.inview {
@@ -257,9 +221,7 @@ body {
 /* Specs row reveal animation */
 
 .spec-row {
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .specs-inview .spec-row {
@@ -276,20 +238,14 @@ body {
 .reveal-left {
   opacity: 0;
   transform: translateX(-24px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .reveal-up {
   opacity: 0;
   transform: translateY(24px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-
-/* New: when in view, fade/slide to visible */
 
 .reveal-left.inview {
   opacity: 1;
@@ -301,14 +257,12 @@ body {
   transform: translateY(0);
 }
 
-/* Back-compat with older .reveal.in usage (not used now, but harmless) */
-
 .reveal.in {
   opacity: 1;
   transform: translate(0, 0);
 }
 
-/***** Carousel *****/
+/* ===== Carousel ===== */
 
 .no-scrollbar {
   scrollbar-width: none;
@@ -322,25 +276,23 @@ body {
   @apply absolute top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white/90 rounded-full p-2 ring-1 ring-white/10;
 }
 
-/***** Surfaces *****/
+/* ===== Surfaces ===== */
 
 .gradient-panel {
   background:
-    radial-gradient(
-      1200px 400px at 80% 80%,
-      rgba(16, 185, 129, 0.08),
-      transparent 60%
-    ),
-    radial-gradient(
-      800px 300px at 20% 20%,
-      rgba(147, 51, 234, 0.1),
-      transparent 60%
-    ),
+    radial-gradient(1200px 400px at 80% 80%, rgba(16, 185, 129, 0.08), transparent 60%),
+    radial-gradient(800px 300px at 20% 20%, rgba(147, 51, 234, 0.1), transparent 60%),
     rgba(255, 255, 255, 0.03);
 }
 
+/* ===== Section optimization ===== */
+
 .section-wrapper {
   position: relative;
+  /* GPU isolation: tells the browser each section is independent for rendering */
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
 }
 
 /* Smooth scroll for anchor links with offset for sticky navbar */
@@ -350,8 +302,8 @@ html {
   scroll-padding-top: 80px;
 }
 
-/* Utility ring style fix on dark bg */
+/* Focus-visible outline only (was previously applied to ALL elements) */
 
-* {
+:focus-visible {
   outline-color: rgba(255, 255, 255, 0.2);
 }

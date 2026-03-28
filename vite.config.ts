@@ -10,4 +10,20 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  build: {
+    // Use LightningCSS for faster CSS minification
+    cssMinify: 'lightningcss',
+    // Skip compressed size reporting for faster builds
+    reportCompressedSize: false,
+    // Chunk splitting: separate vendor from app code
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
 })

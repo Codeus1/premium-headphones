@@ -17,24 +17,19 @@ import './index.css';
 
 function useGlobalRevealObserver() {
   useEffect(() => {
-    const targets = Array.from(
-      document.querySelectorAll('.reveal-left, .reveal-up')
-    );
+    const targets = document.querySelectorAll('.reveal-left, .reveal-up');
     if (!targets.length) return;
 
     const observer = new IntersectionObserver(
-      (entries: IntersectionObserverEntry[], obs: IntersectionObserver) => {
-        entries.forEach((entry: any) => {
+      (entries, obs) => {
+        for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add('inview');
-            // Keep permanently: stop observing this element after first reveal
             obs.unobserve(entry.target);
           }
-        });
+        }
       },
-      {
-        threshold: 0.15,
-      }
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
     );
 
     targets.forEach(el => observer.observe(el));

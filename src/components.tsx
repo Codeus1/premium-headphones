@@ -1,90 +1,91 @@
 /* Duplicate of components.jss to satisfy CRA module resolution (.js). Frontend-only, data mocked. */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-// Image registry (sourced via vision_expert_agent). Each key used at most once.
+// Image registry. All URLs include CDN resizing params to avoid downloading full-res originals.
+// Unsplash: ?w=<px>&q=75&auto=format&fit=crop  (CDN returns WebP at requested size)
+// Pexels:   ?auto=compress&cs=tinysrgb&w=<px>
 export const IMAGES = {
-  hero_main: 'https://images.unsplash.com/photo-1520170350707-b2da59970118',
-  hero_alt_1: 'https://images.unsplash.com/photo-1584585696759-1df9872e1eca',
+  hero_main: 'https://images.unsplash.com/photo-1520170350707-b2da59970118?w=900&q=75&auto=format&fit=crop',
+  hero_alt_1: 'https://images.unsplash.com/photo-1584585696759-1df9872e1eca?w=900&q=75&auto=format&fit=crop',
   hero_alt_2:
-    'https://images.pexels.com/photos/2749495/pexels-photo-2749495.jpeg',
+    'https://images.pexels.com/photos/2749495/pexels-photo-2749495.jpeg?auto=compress&cs=tinysrgb&w=900',
 
   // Materials / Macro
   material_aluminum:
-    'https://images.unsplash.com/photo-1487215078519-e21cc028cb29',
+    'https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=900&q=75&auto=format&fit=crop',
   material_hinge:
-    'https://images.unsplash.com/photo-1617714313606-283484c136be',
+    'https://images.unsplash.com/photo-1617714313606-283484c136be?w=900&q=75&auto=format&fit=crop',
   material_leather:
-    'https://images.pexels.com/photos/2858481/pexels-photo-2858481.jpeg',
+    'https://images.pexels.com/photos/2858481/pexels-photo-2858481.jpeg?auto=compress&cs=tinysrgb&w=900',
 
   // Lifestyle / Model
   model_male_side:
-    'https://images.unsplash.com/photo-1593769645155-d6416081c0c5',
+    'https://images.unsplash.com/photo-1593769645155-d6416081c0c5?w=800&q=75&auto=format&fit=crop',
   model_person_moody:
-    'https://images.pexels.com/photos/1812237/pexels-photo-1812237.jpeg',
+    'https://images.pexels.com/photos/1812237/pexels-photo-1812237.jpeg?auto=compress&cs=tinysrgb&w=800',
   model_female:
-    'https://images.pexels.com/photos/2531356/pexels-photo-2531356.jpeg',
+    'https://images.pexels.com/photos/2531356/pexels-photo-2531356.jpeg?auto=compress&cs=tinysrgb&w=800',
 
   // Smart connectivity
-  airpods_dark: 'https://images.unsplash.com/photo-1615281612781-4b972bd4e3fe',
-  iphone_dark: 'https://images.unsplash.com/photo-1632560354926-21886c0e811c',
+  airpods_dark: 'https://images.unsplash.com/photo-1615281612781-4b972bd4e3fe?w=800&q=75&auto=format&fit=crop',
+  iphone_dark: 'https://images.unsplash.com/photo-1632560354926-21886c0e811c?w=800&q=75&auto=format&fit=crop',
 
   // Hi-Res (white/silver)
-  hires_white_1: 'https://images.unsplash.com/photo-1491927570842-0261e477d937',
+  hires_white_1: 'https://images.unsplash.com/photo-1491927570842-0261e477d937?w=900&q=75&auto=format&fit=crop',
   hires_white_2:
-    'https://images.pexels.com/photos/3496992/pexels-photo-3496992.jpeg',
+    'https://images.pexels.com/photos/3496992/pexels-photo-3496992.jpeg?auto=compress&cs=tinysrgb&w=900',
 
   // Additional product shots for variants/pricing
   variant_sony_grey:
-    'https://images.unsplash.com/photo-1527283308122-41ee35be6195',
+    'https://images.unsplash.com/photo-1527283308122-41ee35be6195?w=800&q=75&auto=format&fit=crop',
   variant_black_alt:
-    'https://images.unsplash.com/photo-1599855129764-f4cc28295202',
+    'https://images.unsplash.com/photo-1599855129764-f4cc28295202?w=900&q=75&auto=format&fit=crop',
   variant_white:
-    'https://images.pexels.com/photos/2123430/pexels-photo-2123430.jpeg',
+    'https://images.pexels.com/photos/2123430/pexels-photo-2123430.jpeg?auto=compress&cs=tinysrgb&w=800',
 
-  // Color variants for Design section
+  // Color variants for Design section (displayed at max 400px, 800 for 2x retina)
   color_black:
     'https://customer-assets.emergentagent.com/job_aura-showcase/artifacts/40d5tl2u_Headphone.png',
-  color_white: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b',
-  color_lime: 'https://images.unsplash.com/photo-1606813907291-76e6f2f3b49d',
-  color_blue: 'https://images.unsplash.com/photo-1518449071461-3422f49e3d19',
+  color_white: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&q=75&auto=format&fit=crop',
+  color_lime: 'https://images.unsplash.com/photo-1606813907291-76e6f2f3b49d?w=800&q=75&auto=format&fit=crop',
+  color_blue: 'https://images.unsplash.com/photo-1518449071461-3422f49e3d19?w=800&q=75&auto=format&fit=crop',
 
-  // Testimonials (8 distinct portraits)
-  t1: 'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c',
-  t2: 'https://images.unsplash.com/photo-1569913486515-b74bf7751574',
-  t3: 'https://images.unsplash.com/photo-1601455763557-db1bea8a9a5a',
-  t4: 'https://images.unsplash.com/photo-1581065178047-8ee15951ede6',
-  t5: 'https://images.unsplash.com/photo-1560250097-0b93528c311a',
-  t6: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2',
-  t7: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
-  t8: 'https://images.pexels.com/photos/33338682/pexels-photo-33338682.jpeg',
+  // Testimonials — avatars displayed at 36px, 72px for 2x retina screens
+  t1: 'https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?w=72&q=80&auto=format&fit=crop',
+  t2: 'https://images.unsplash.com/photo-1569913486515-b74bf7751574?w=72&q=80&auto=format&fit=crop',
+  t3: 'https://images.unsplash.com/photo-1601455763557-db1bea8a9a5a?w=72&q=80&auto=format&fit=crop',
+  t4: 'https://images.unsplash.com/photo-1581065178047-8ee15951ede6?w=72&q=80&auto=format&fit=crop',
+  t5: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=72&q=80&auto=format&fit=crop',
+  t6: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=72&q=80&auto=format&fit=crop',
+  t7: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=72&q=80&auto=format&fit=crop',
+  t8: 'https://images.pexels.com/photos/33338682/pexels-photo-33338682.jpeg?auto=compress&cs=tinysrgb&w=72',
 };
 
-// Utilities
-export const useInView = (
-  options: IntersectionObserverInit = {
-    threshold: 0.2,
-  }
-) => {
+// Stable default options — hoisted outside the hook to avoid re-creating on every render
+const DEFAULT_INVIEW_OPTIONS: IntersectionObserverInit = { threshold: 0.2 };
+
+export const useInView = (options: IntersectionObserverInit = DEFAULT_INVIEW_OPTIONS) => {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
+  const optsRef = useRef(options);
+  optsRef.current = options;
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      (entries: IntersectionObserverEntry[]) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) setInView(true);
-        });
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) { setInView(true); obs.unobserve(e.target); }
+        }
       },
-      options
+      optsRef.current
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [options]);
-  return {
-    ref,
-    inView,
-  };
+  }, []);
+
+  return { ref, inView };
 };
 
 interface SectionProps {
@@ -108,8 +109,16 @@ export const Section: React.FC<SectionProps> = ({
 export const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener('scroll', onScroll);
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 8);
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   return (
@@ -126,7 +135,7 @@ export const NavBar = () => {
           className="font-display text-lg tracking-wide text-white/90 hover:text-white"
         >
           {' '}
-          AuraMax{' '}
+          KRYPTOX{' '}
         </a>{' '}
         <nav className="hidden md:flex items-center gap-8 text-sm">
           <a
@@ -192,24 +201,29 @@ export const Hero = () => {
       {' '}
       {/* Flat black background */}{' '}
       <div className="absolute inset-0 -z-10 bg-black" />
-      {/* Stage: centered headphone with large faint AURAMAX behind */}{' '}
+      {/* Stage: centered headphone with large faint KRYPTOX behind */}{' '}
       <div className="container mx-auto max-w-[1280px] px-6 md:px-8 lg:px-12">
         <h1 className="sr-only">
           {' '}
-          AuraMax— Experience studio-grade audio with industry-leading noise
+          KRYPTOX— Experience studio-grade audio with industry-leading noise
           cancellation{' '}
         </h1>{' '}
         <div className="relative mx-auto w-full max-w-6xl aspect:[21/9] md:aspect-[16/7] flex items-center justify-center">
           <div
             className={`pointer-events-none select-none absolute inset-0 flex items-center justify-center transition-opacity duration-700 ${showBg ? 'opacity-100' : 'opacity-0'}`}
           >
-            <span className="hero-bg-text text-center"> AURAMAX </span>{' '}
+            <span className="hero-bg-text text-center"> KRYPTOX </span>{' '}
           </div>{' '}
+          <div className="hero-shadow" />
           <img
             src="https://customer-assets.emergentagent.com/job_aura-showcase/artifacts/40d5tl2u_Headphone.png"
-            alt="AuraMax headphones front view"
+            alt="KRYPTOX headphones front view"
             loading="eager"
-            className={`relative z-10 w-[51%] md:w-[43%] lg:w-[37%] h-auto object-contain drop-shadow-[0_40px_120px_rgba(0,0,0,0.6)] ${showImg ? 'animate-[heroIn_900ms_ease-out_forwards]' : 'opacity-0'}`}
+            decoding="async"
+            fetchPriority="high"
+            width={600}
+            height={600}
+            className={`relative z-10 w-[51%] md:w-[43%] lg:w-[37%] h-auto object-contain ${showImg ? 'animate-[heroIn_900ms_ease-out_forwards]' : 'opacity-0'}`}
           />{' '}
         </div>
         {/* Info row beneath, horizontally aligned */}{' '}
@@ -275,7 +289,7 @@ export const Hero = () => {
             <iframe
               className="w-full h-full"
               src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0"
-              title="AuraMax Demo"
+              title="KRYPTOX Demo"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
@@ -294,7 +308,7 @@ export const MeetAura = () => {
         <div className="relative mx-auto w-full flex items-center justify-center">
           <div
             role="img"
-            aria-label="Person listening to music wearing AuraMax headphones"
+            aria-label="Person listening to music wearing KRYPTOX headphones"
             className="block"
             style={{
               width: '500px',
@@ -309,7 +323,7 @@ export const MeetAura = () => {
             data-reveal="left"
           >
             {' '}
-            Meet AuraMax{' '}
+            Meet KRYPTOX{' '}
           </p>{' '}
           <h2 className="h2 reveal-left" data-reveal="left">
             {' '}
@@ -457,6 +471,7 @@ const BentoCard: React.FC<BentoCardProps> = ({
       src={img}
       alt={alt}
       loading="lazy"
+      decoding="async"
       className="absolute inset-0 w-full h-full object-cover opacity-70"
     />
     <div
@@ -474,49 +489,51 @@ const BentoCard: React.FC<BentoCardProps> = ({
   </article>
 );
 
+// Color variants — hoisted outside component to avoid re-allocation every render
+const COLOR_VARIANTS = {
+  black: {
+    label: 'Graphite Black',
+    src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/1w5e5yho_Frame%202121453887.png',
+    dotClass: 'bg-black ring-2 ring-white/70',
+  },
+  white: {
+    label: 'Silver White',
+    src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/zeod89vd_whitw.png',
+    dotClass: 'bg-white/90 ring-1 ring-white/30',
+  },
+  lime: {
+    label: 'Lime',
+    src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/u7e0g1vp_Frame%202121453885.png',
+    dotClass: 'bg-lime-300/90 ring-1 ring-white/20',
+  },
+  blue: {
+    label: 'Blue',
+    src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/6635jgng_Frame%202121453886.png',
+    dotClass: 'bg-blue-500/90 ring-1 ring-white/20',
+  },
+} as const;
+type ColorKey = keyof typeof COLOR_VARIANTS;
+const COLOR_ENTRIES = Object.entries(COLOR_VARIANTS) as [ColorKey, (typeof COLOR_VARIANTS)[ColorKey]][];
+
 export const DesignStyles = () => {
-  const variants = {
-    black: {
-      label: 'Graphite Black',
-      src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/1w5e5yho_Frame%202121453887.png',
-      dotClass: 'bg-black ring-2 ring-white/70',
-    },
-    white: {
-      label: 'Silver White',
-      src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/zeod89vd_whitw.png',
-      dotClass: 'bg-white/90 ring-1 ring-white/30',
-    },
-    lime: {
-      label: 'Lime',
-      src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/u7e0g1vp_Frame%202121453885.png',
-      dotClass: 'bg-lime-300/90 ring-1 ring-white/20',
-    },
-    blue: {
-      label: 'Blue',
-      src: 'https://customer-assets.emergentagent.com/job_premium-audio-ui/artifacts/6635jgng_Frame%202121453886.png',
-      dotClass: 'bg-blue-500/90 ring-1 ring-white/20',
-    },
-  };
-  const [color, setColor] = useState<keyof typeof variants>('black');
-  const active = variants[color];
+  const [color, setColor] = useState<ColorKey>('black');
+  const active = COLOR_VARIANTS[color];
   const [fade, setFade] = useState(false);
 
-  const onPick = (key: keyof typeof variants) => {
-    if (key === color) return;
-    setFade(true);
-    // small fade-out then swap then fade-in
-    setTimeout(() => {
-      setColor(key);
-      setFade(false);
-    }, 300);
-  };
+  const onPick = useCallback((key: ColorKey) => {
+    setColor(prev => {
+      if (key === prev) return prev;
+      setFade(true);
+      setTimeout(() => { setFade(false); }, 300);
+      return key;
+    });
+  }, []);
 
   return (
     <Section id="design" className="py-16 md:py-24">
       <div className="mx-auto max-w-[1280px] px-6 md:px-8">
         <p className="eyebrow eyebrow-gradient reveal-left" data-reveal="left">
-          {' '}
-          Design & amp; Build{' '}
+          Design & Build{' '}
         </p>{' '}
         <h2 className="h2 mt-6 text-left reveal-left" data-reveal="left">
           {' '}
@@ -526,8 +543,11 @@ export const DesignStyles = () => {
         <div className="mt-10 flex justify-center">
           <img
             src={active.src}
-            alt={`AuraMax ${active.label}`}
+            alt={`KRYPTOX ${active.label}`}
             loading="lazy"
+            decoding="async"
+            width={400}
+            height={400}
             className={`w-full max-w-[400px] h-auto object-contain transition-opacity duration-300 ${fade ? 'opacity-0' : 'opacity-100'}`}
           />{' '}
         </div>{' '}
@@ -536,11 +556,11 @@ export const DesignStyles = () => {
           <p className="font-medium text-white/90"> {active.label} </p>{' '}
           <div className="mt-4 flex items-center gap-4">
             {' '}
-            {Object.entries(variants).map(([key, v]) => (
+            {COLOR_ENTRIES.map(([key, v]) => (
               <button
                 key={key}
                 aria-label={v.label}
-                onClick={() => onPick(key as keyof typeof variants)}
+                onClick={() => onPick(key)}
                 className={`w-7 h-7 rounded-full ring-offset-2 ring-offset-black focus:outline-none focus:ring-2 focus:ring-white/40 ${v.dotClass} ${color === key ? '' : 'opacity-80'}`}
                 title={v.label}
               />
@@ -552,19 +572,21 @@ export const DesignStyles = () => {
   );
 };
 
+// Specs data — hoisted to module level
+const SPEC_ROWS = [
+  ['Driver Size', '40mm Titanium-Coated Dynamic Drivers'],
+  ['Frequency Response', '10Hz – 40kHz'],
+  ['Impedance', '32Ω'],
+  ['Bluetooth Version', '5.3 with Multipoint Connectivity'],
+  ['Audio Codecs', 'SBC, AAC, aptX™, aptX Adaptive™'],
+  ['Noise Cancellation', 'Hybrid Active Noise Cancellation (up to 40dB)'],
+  ['Battery Life', 'Up to 40h (ANC off), 30h (ANC on)'],
+  ['Charging Time', '1.5h (USB-C Fast Charge)'],
+  ['Microphones', 'Dual Beamforming Mics with ENC'],
+  ['Weight', '260g'],
+] as const;
+
 export const Specs = () => {
-  const rows = [
-    ['Driver Size', '40mm Titanium-Coated Dynamic Drivers'],
-    ['Frequency Response', '10Hz – 40kHz'],
-    ['Impedance', '32Ω'],
-    ['Bluetooth Version', '5.3 with Multipoint Connectivity'],
-    ['Audio Codecs', 'SBC, AAC, aptX™, aptX Adaptive™'],
-    ['Noise Cancellation', 'Hybrid Active Noise Cancellation (up to 40dB)'],
-    ['Battery Life', 'Up to 40h (ANC off), 30h (ANC on)'],
-    ['Charging Time', '1.5h (USB-C Fast Charge)'],
-    ['Microphones', 'Dual Beamforming Mics with ENC'],
-    ['Weight', '260g'],
-  ];
   const wrapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = wrapRef.current;
@@ -595,16 +617,16 @@ export const Specs = () => {
       </h2>{' '}
       <p className="mt-4 text-neutral-300 reveal-left" data-reveal="left">
         {' '}
-        All the details that make the AuraMax exceptional.{' '}
+        All the details that make the KRYPTOX exceptional.{' '}
       </p>{' '}
       {/* Vertical stacked specifications with separators; no card background */}{' '}
       <div ref={wrapRef} className="mt-10">
         <dl className="divide-y divide-white/10">
           {' '}
-          {rows.map(([k, v]) => (
+          {SPEC_ROWS.map(([k, v]) => (
             <div
               key={k}
-              className={`grid grid-cols-1 md:grid-cols-3 items-start gap-4 md:gap-8 py-5 md:py-6 opacity-0 translate-y-4 will-change-transform spec-row`}
+              className="grid grid-cols-1 md:grid-cols-3 items-start gap-4 md:gap-8 py-5 md:py-6 opacity-0 translate-y-4 spec-row"
             >
               <dt className="text-white/60 text-sm md:text-base col-span-1">
                 {' '}
@@ -623,27 +645,14 @@ export const Specs = () => {
   );
 };
 
+// Testimonial data — hoisted to module level
+const TESTIMONIAL_CARDS = [
+  { img: IMAGES.t1, name: 'Beat Craft', handle: '@beatcraft', quote: 'These sound better than my studio monitors.' },
+  { img: IMAGES.t2, name: 'Emily L.', handle: '@emilylondon', quote: 'I wear them for 8 hours straight — no fatigue.' },
+  { img: IMAGES.t3, name: 'Marcus T.', handle: '@marcusprod', quote: 'You’ll hear songs you thought you knew, differently.' },
+] as const;
+
 export const Testimonials = () => {
-  const cards = [
-    {
-      img: IMAGES.t1,
-      name: 'Beat Craft',
-      handle: '@beatcraft',
-      quote: 'These sound better than my studio monitors.',
-    },
-    {
-      img: IMAGES.t2,
-      name: 'Emily L.',
-      handle: '@emilylondon',
-      quote: 'I wear them for 8 hours straight — no fatigue.',
-    },
-    {
-      img: IMAGES.t3,
-      name: 'Marcus T.',
-      handle: '@marcusprod',
-      quote: 'You’ll hear songs you thought you knew, differently.',
-    },
-  ];
   return (
     <Section id="reviews" className="py-16 md:py-24">
       {' '}
@@ -669,7 +678,7 @@ export const Testimonials = () => {
       {/* Cards */}{' '}
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {' '}
-        {cards.map((p: any, i: number) => (
+        {TESTIMONIAL_CARDS.map((p, i) => (
           <figure
             key={i}
             className="rounded-2xl ring-1 ring-white/10 p-6 bg-white/[0.04]"
@@ -685,6 +694,9 @@ export const Testimonials = () => {
                 alt={`${p.name} portrait`}
                 className="w-9 h-9 rounded-full object-cover ring-1 ring-white/10"
                 loading="lazy"
+                decoding="async"
+                width={36}
+                height={36}
               />
               <figcaption className="text-sm text-white/80">
                 {' '}
@@ -705,33 +717,17 @@ export const Testimonials = () => {
   );
 };
 
+// FAQ data — hoisted to module level
+const FAQ_ITEMS = [
+  { q: 'What’s the battery life like with ANC on?', a: 'Up to 30 hours with ANC on; 40 hours with ANC off.' },
+  { q: 'Can I use it wired and wireless?', a: 'Yes, Bluetooth 5.3 or 3.5mm analog with included cable.' },
+  { q: 'Is it compatible with iOS and Android?', a: 'Fully compatible with iOS, Android, Mac, and Windows.' },
+  { q: 'Does it support multipoint Bluetooth connections?', a: 'Yes — connect to two devices simultaneously.' },
+  { q: 'How long does it take to fully charge?', a: 'About 1.5 hours via USB‑C Fast Charge.' },
+  { q: 'What’s included in the box?', a: 'KRYPTOX, travel case, USB‑C cable, 3.5mm cable, quick start guide.' },
+] as const;
+
 export const FAQ = () => {
-  const items = [
-    {
-      q: 'What’s the battery life like with ANC on?',
-      a: 'Up to 30 hours with ANC on; 40 hours with ANC off.',
-    },
-    {
-      q: 'Can I use it wired and wireless?',
-      a: 'Yes, Bluetooth 5.3 or 3.5mm analog with included cable.',
-    },
-    {
-      q: 'Is it compatible with iOS and Android?',
-      a: 'Fully compatible with iOS, Android, Mac, and Windows.',
-    },
-    {
-      q: 'Does it support multipoint Bluetooth connections?',
-      a: 'Yes — connect to two devices simultaneously.',
-    },
-    {
-      q: 'How long does it take to fully charge?',
-      a: 'About 1.5 hours via USB‑C Fast Charge.',
-    },
-    {
-      q: 'What’s included in the box?',
-      a: 'AuraMax, travel case, USB‑C cable, 3.5mm cable, quick start guide.',
-    },
-  ];
   return (
     <Section id="faq" className="py-16 md:py-24">
       <p
@@ -746,11 +742,11 @@ export const FAQ = () => {
         data-reveal="up"
       >
         {' '}
-        Got Questions ? We’ ve Got Answers.{' '}
+        Got Questions? We've Got Answers.{' '}
       </h2>{' '}
       <div className="mt-8 divide-y divide-white/10 rounded-2xl ring-1 ring-white/10 overflow-hidden">
         {' '}
-        {items.map((it: any, idx: number) => (
+        {FAQ_ITEMS.map((it, idx) => (
           <Disclosure key={idx} q={it.q} a={it.a} />
         ))}{' '}
       </div>{' '}
@@ -795,10 +791,10 @@ export const PricingAnchor = () => (
   <Section id="pricing" className="py-20">
     <div className="max-w-2xl mx-auto text-center">
       <p className="eyebrow eyebrow-gradient"> Pricing </p>{' '}
-      <h3 className="h3 mt-2"> Pre‑ order opens soon </h3>{' '}
+      <h3 className="h3 mt-2">Pre-order opens soon</h3>{' '}
       <p className="mt-3 text-white/60">
         {' '}
-        Be the first to know when pricing goes live.Use the contact form below
+        Be the first to know when pricing goes live. Use the contact form below
         to get notified.{' '}
       </p>{' '}
       <a href="#contact" className="btn mt-6">
@@ -927,7 +923,7 @@ export const FooterCta = () => {
             <div className="flex flex-col gap-3">
               <span className="font-display text-xl tracking-wide text-white/90">
                 {' '}
-                AuraMax{' '}
+                KRYPTOX{' '}
               </span>{' '}
               <p className="text-white/60"> Designed to Move You </p>{' '}
             </div>{' '}
@@ -1003,11 +999,11 @@ export const FooterCta = () => {
           </div>
           {/* Large hero-style background word centered */}{' '}
           <div className="mt-16 text-center" aria-hidden>
-            <span className="hero-bg-text block"> AURAMAX </span>{' '}
+            <span className="hero-bg-text block"> KRYPTOX </span>{' '}
           </div>
           {/* Bottom bar with centered copyright */}{' '}
           <div className="mt-10 pt-6 border-t border-white/10 text-center text-white/40 text-sm">
-            AuraMax© {new Date().getFullYear()}— All rights reserved{' '}
+            KRYPTOX© {new Date().getFullYear()}— All rights reserved{' '}
           </div>{' '}
         </div>{' '}
       </div>{' '}
