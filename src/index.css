@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Space+Grotesk:wght@400;600;700&display=swap');
+@import 'tailwindcss';
+/* Hero background word style */
+
+.hero-bg-text {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    'Apple Color Emoji',
+    'Segoe UI Emoji';
+  font-size: clamp(72px, 12vw, 180px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  /* default normal line height */
+  letter-spacing: -0.04em;
+  /* scales with font size */
+  display: inline-block;
+  white-space: nowrap;
+  background: linear-gradient(180deg, #5a5a5a 0%, #0a100f 74.18%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Keyframes for hero intro */
+
+@keyframes heroIn {
+  0% {
+    opacity: 0;
+    transform: translate(40px, 40px) scale(0.86);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes infoUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bgFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Fonts */
+
+:root {
+  --bg: #000000;
+  --panel: rgba(255, 255, 255, 0.04);
+  --ring: rgba(255, 255, 255, 0.1);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #000000;
+  color: white;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    'Apple Color Emoji',
+    'Segoe UI Emoji';
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/***** Typography *****/
+
+.font-display {
+  font-family: 'Space Grotesk', Inter, system-ui, sans-serif;
+}
+
+.eyebrow {
+  font-size: clamp(16px, 2.6vw, 24px);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.eyebrow-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(110, 231, 183, 1) 0%,
+    rgba(103, 232, 249, 1) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.h1 {
+  font-family: 'Space Grotesk', Inter, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-size: clamp(48px, 8vw, 96px);
+}
+
+.h2 {
+  font-family: 'Space Grotesk', Inter, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-size: clamp(36px, 6vw, 64px);
+}
+
+.h3 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  font-size: clamp(28px, 4vw, 40px);
+}
+
+.h4 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  font-size: clamp(20px, 3vw, 24px);
+}
+
+/***** Buttons & Inputs *****/
+
+.btn {
+  @apply inline-flex items-center justify-center px-5 py-3 rounded-full bg-white text-black font-semibold hover:bg-neutral-200 transition-colors;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-sm rounded-full bg-white/10 text-white hover:bg-white/20 ring-1 ring-white/15;
+}
+
+.input {
+  @apply rounded-full px-4 py-3 bg-white/5 text-white placeholder-white/40 outline-none ring-1 ring-white/10 focus:ring-white/20;
+}
+
+.nav-link {
+  @apply text-white/70 hover:text-white transition-colors;
+}
+
+/***** Cards *****/
+
+.card {
+  @apply rounded-2xl p-4 md:p-6 bg-white/[0.04] ring-1 ring-white/10;
+}
+
+.card-sm {
+  @apply rounded-xl p-3 bg-white/[0.03] ring-1 ring-white/10;
+}
+
+.hover-lift {
+  transform: translateY(0);
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+/***** Hero *****/
+
+.stacked-heading {
+  position: relative;
+}
+
+.stacked-heading .stack-line {
+  font-family: 'Space Grotesk', Inter, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  font-size: clamp(56px, 10vw, 108px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+  opacity: 0.8;
+}
+
+.stacked-heading .stack-line:nth-child(1) {
+  transform: translateY(-16px);
+}
+
+.stacked-heading .stack-line:nth-child(2) {
+  transform: translateY(-12px);
+}
+
+.stacked-heading .stack-line:nth-child(3) {
+  transform: translateY(-8px);
+}
+
+.stacked-heading .stack-line:nth-child(4) {
+  transform: translateY(-4px);
+}
+
+.stacked-heading .stack-line:nth-child(5) {
+  transform: translateY(0px);
+}
+
+.stacked-heading .stack-line:nth-child(6) {
+  transform: translateY(4px);
+}
+
+.hero-media {
+  filter: drop-shadow(0 40px 120px rgba(0, 0, 0, 0.6));
+}
+
+/***** Animations *****/
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.fade-up.inview {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Specs row reveal animation */
+
+.spec-row {
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.specs-inview .spec-row {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Generic reveal utilities */
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.reveal-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+/* New: when in view, fade/slide to visible */
+
+.reveal-left.inview {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-up.inview {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Back-compat with older .reveal.in usage (not used now, but harmless) */
+
+.reveal.in {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/***** Carousel *****/
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-btn {
+  @apply absolute top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white/90 rounded-full p-2 ring-1 ring-white/10;
+}
+
+/***** Surfaces *****/
+
+.gradient-panel {
+  background:
+    radial-gradient(
+      1200px 400px at 80% 80%,
+      rgba(16, 185, 129, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 300px at 20% 20%,
+      rgba(147, 51, 234, 0.1),
+      transparent 60%
+    ),
+    rgba(255, 255, 255, 0.03);
+}
+
+.section-wrapper {
+  position: relative;
+}
+
+/* Smooth scroll for anchor links with offset for sticky navbar */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Utility ring style fix on dark bg */
+
+* {
+  outline-color: rgba(255, 255, 255, 0.2);
+}
